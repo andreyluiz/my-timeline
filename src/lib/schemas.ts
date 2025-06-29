@@ -1,0 +1,22 @@
+import { z } from "zod";
+
+export const signinSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+export type SigninSchema = z.infer<typeof signinSchema>;
+
+export const signupSchema = z
+  .object({
+    name: z.string().min(2),
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type SignupSchema = z.infer<typeof signupSchema>;
