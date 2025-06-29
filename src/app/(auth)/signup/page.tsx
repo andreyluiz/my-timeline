@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -126,6 +127,9 @@ export default function SignupPage() {
                 disabled={form.formState.isSubmitting}
               >
                 Sign up
+                {form.formState.isSubmitting ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : null}
               </Button>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}

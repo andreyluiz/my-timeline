@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -92,6 +93,9 @@ export default function LoginPage() {
                 disabled={form.formState.isSubmitting}
               >
                 Sign in
+                {form.formState.isSubmitting ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : null}
               </Button>
               <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}

@@ -20,3 +20,11 @@ export const signupSchema = z
   });
 
 export type SignupSchema = z.infer<typeof signupSchema>;
+
+export const createTimelineSchema = z.object({
+  title: z.string().min(2),
+  startDate: z.date(),
+  endDate: z.date().optional(),
+});
+
+export type CreateTimelineSchema = z.infer<typeof createTimelineSchema>;
