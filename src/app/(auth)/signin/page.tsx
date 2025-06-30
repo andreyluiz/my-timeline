@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -35,10 +36,12 @@ export default function LoginPage() {
       password: "",
     },
   });
+  const router = useRouter();
 
   const onSubmit = async (data: SigninSchema) => {
     try {
       await signin(data);
+      router.push("/timelines");
     } catch (error) {
       const genericError = error as Error;
       toast.error("Something went wrong", {
