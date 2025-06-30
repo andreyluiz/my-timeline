@@ -22,7 +22,7 @@ The user interface should be intuitive and easy to use. It should be responsive 
 
 ## Technology
 
-The application is a Next.js application using TypeScript, React and Tailwind CSS. The timeline is made with D3.js. Bun is the package manager. The timeline data should be stored in Supabase. Zod and react-hook-form for form validation.
+The application is a Next.js application using TypeScript, React and Tailwind CSS. The timeline is made with Pixi.js. Bun is the package manager. The timeline data should be stored in Supabase. Zod and react-hook-form for form validation.
 
 ## Basic directory structure
 
