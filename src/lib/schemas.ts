@@ -28,3 +28,12 @@ export const createTimelineSchema = z.object({
 });
 
 export type CreateTimelineSchema = z.infer<typeof createTimelineSchema>;
+
+export const createEventSchema = z.object({
+  title: z.string().min(2),
+  description: z.string().optional(),
+  date: z.date(),
+  importance: z.number().min(1).max(5),
+});
+
+export type CreateEventSchema = z.infer<typeof createEventSchema>;

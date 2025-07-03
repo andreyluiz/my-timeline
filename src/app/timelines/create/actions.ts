@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import type { CreateTimelineSchema } from "@/lib/schemas";
@@ -12,7 +13,7 @@ export async function createTimeline(data: CreateTimelineSchema) {
     redirect("/signin");
   }
 
-  await prisma.timeline.create({
+  const timeline = await prisma.timeline.create({
     data: {
       title: data.title,
       startDate: new Date(data.startDate),
@@ -21,5 +22,6 @@ export async function createTimeline(data: CreateTimelineSchema) {
     },
   });
 
-  redirect("/");
+  revalidatePath("/timelines");
+  redirect(`/timelines/${timeline.id}`);
 }

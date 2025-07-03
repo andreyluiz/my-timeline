@@ -14,7 +14,12 @@ export class TimelineGame {
   private endDate: Date | null;
   private pixelsPerDay: number = 12;
   private zoomLevelText: PIXI.Text | null = null;
-  public onEventHover?: (event: Event | null, x: number, y: number) => void;
+  public onEventHover?: (
+    event: Event | null,
+    x: number,
+    y: number,
+    pixelsPerDay: number,
+  ) => void;
   public onEventClick?: (event: Event | null) => void;
   private disableInteractions: boolean = false;
 
@@ -53,7 +58,7 @@ export class TimelineGame {
     const timelineStartDate = new Date(this.startDate).getTime();
     const timelineEndDate =
       this.endDate === null
-        ? new Date().getTime()
+        ? Date.now()
         : new Date(this.endDate).getTime();
 
     const timelineDuration = timelineEndDate - timelineStartDate;
@@ -179,9 +184,11 @@ export class TimelineGame {
         const timelineGlobalY = this.timeline.y;
         const popupX = eventGlobalX;
         const popupY = timelineGlobalY + 20; // 20px below the timeline line
-        this.onEventHover?.(event, popupX, popupY);
+        this.onEventHover?.(event, popupX, popupY, this.pixelsPerDay);
       });
-      eventCircle.on("pointerout", () => this.onEventHover?.(null, 0, 0));
+      eventCircle.on("pointerout", () =>
+        this.onEventHover?.(null, 0, 0, this.pixelsPerDay),
+      );
       eventCircle.on("pointertap", () => this.onEventClick?.(event));
 
       this.timeline.addChild(eventCircle);
@@ -202,7 +209,7 @@ export class TimelineGame {
       { fill: "white", fontSize: 16 },
     );
     this.zoomLevelText.x = this.app.screen.width - this.zoomLevelText.width - 10;
-    this.zoomLevelText.y = 10;
+    this.zoomLevelText.y = this.app.screen.height - this.zoomLevelText.height - 10;
     this.app.stage.addChild(this.zoomLevelText);
 
     this._drawTimelineElements();
@@ -326,5 +333,14 @@ export class TimelineGame {
 
   public destroy() {
     this.app?.destroy(true, true);
+  }
+
+  public addEvent(event: Event) {
+    this.events.push(event);
+    this.events.sort(
+      (a: Event, b: Event) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+    this._drawTimelineElements();
   }
 }
