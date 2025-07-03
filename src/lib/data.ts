@@ -20,3 +20,21 @@ export async function getTimelines() {
     },
   });
 }
+
+export async function getTimeline(id: string) {
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  return prisma.timeline.findUnique({
+    where: {
+      id,
+      ownerId: user.id,
+    },
+    include: {
+      events: true,
+    },
+  });
+}
