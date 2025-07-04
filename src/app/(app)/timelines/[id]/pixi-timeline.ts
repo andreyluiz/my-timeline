@@ -331,6 +331,10 @@ export class TimelineGame {
     }
   }
 
+  public jumpToLastEvent() {
+    this.jumpToEvent(this.events.length - 1);
+  }
+
   public destroy() {
     this.app?.destroy(true, true);
   }

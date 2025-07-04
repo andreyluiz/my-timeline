@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Event, Timeline } from "@/generated/prisma";
 import { AddEventDialog } from "./add-event-dialog";
+import { EventPanel } from "./event-panel";
+import { TimelineControls } from "./timeline-controls";
 import { TimelineGame } from "./pixi-timeline";
 
 interface PixiTimelineProps {
@@ -19,6 +21,7 @@ export const PixiTimeline: React.FC<PixiTimelineProps> = ({ timeline }) => {
   const pixiContainerRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<TimelineGame | null>(null);
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     if (pixiContainerRef.current) {
@@ -30,6 +33,13 @@ export const PixiTimeline: React.FC<PixiTimelineProps> = ({ timeline }) => {
           setTooltip(null);
         }
       };
+      game.onEventClick = (event) => {
+        if (event) {
+          setSelectedEvent(event);
+          game.centerEvent(event);
+          game.setInteractionsEnabled(false);
+        }
+      };
       game.init();
       gameRef.current = game;
     }
@@ -38,6 +48,11 @@ export const PixiTimeline: React.FC<PixiTimelineProps> = ({ timeline }) => {
       gameRef.current?.destroy();
     };
   }, [timeline]);
+
+  const handleClosePanel = () => {
+    setSelectedEvent(null);
+    gameRef.current?.setInteractionsEnabled(true);
+  };
 
   return (
     <div className="w-full h-full relative">
@@ -51,9 +66,13 @@ export const PixiTimeline: React.FC<PixiTimelineProps> = ({ timeline }) => {
           <p>{tooltip.event.description}</p>
         </div>
       )}
-      <div className="absolute top-0 right-0 p-8">
+      {selectedEvent && (
+        <EventPanel event={selectedEvent} onClose={handleClosePanel} />
+      )}
+      <div className="absolute top-4 right-4">
         <AddEventDialog timelineId={timeline.id} gameRef={gameRef} />
       </div>
+      <TimelineControls gameRef={gameRef} />
     </div>
   );
 };
