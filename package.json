@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome check .",
+    "postinstall": "prisma generate",
     "add-dummy-events": "bun run scripts/add-dummy-events.ts"
   },
   "dependencies": {
