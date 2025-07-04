@@ -1,5 +1,8 @@
-import { HomeIcon } from "lucide-react";
+"use client";
+
+import { HomeIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -11,15 +14,27 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { createClient } from "@/lib/supabase/client";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = createClient();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    redirect("/login");
+  };
+
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader>
+        <SidebarHeader className="p-4">
           <h2 className="text-lg font-semibold">Timelines</h2>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className="p-4">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
@@ -31,8 +46,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter>
-          <p>Footer</p>
+        <SidebarFooter className="p-4">
+          <SidebarMenuButton asChild onClick={signOut}>
+            <Link href="/">
+              <LogOutIcon className="w-4 h-4" />
+              Logout
+            </Link>
+          </SidebarMenuButton>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>{children}</SidebarInset>

@@ -1,5 +1,6 @@
 "use client";
 
+import { PlusIcon } from "lucide-react";
 import { type RefObject, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,10 @@ export function AddEventDialog({ timelineId, gameRef }: AddEventDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Event</Button>
+        <Button>
+          <PlusIcon className="mr-2" />
+          Add Event
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

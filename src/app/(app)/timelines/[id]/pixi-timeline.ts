@@ -336,7 +336,9 @@ export class TimelineGame {
   }
 
   public destroy() {
-    this.app?.destroy(true, true);
+    if (this.app) {
+      this.app.destroy(true, true);
+    }
   }
 
   public addEvent(event: Event) {
